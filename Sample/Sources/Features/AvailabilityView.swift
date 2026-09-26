@@ -19,6 +19,9 @@ struct AvailabilityView: View {
                         Label("Unavailable", systemImage: "xmark.octagon.fill").foregroundStyle(.red)
                         LabeledContent("Reason", value: reason)
                         Text(advice).font(.footnote).foregroundStyle(.secondary)
+                        if reason.contains("modelNotReady") {
+                            Label("Retrying every 5 s… (\(status.retries))", systemImage: "arrow.trianglehead.2.clockwise").font(.footnote)
+                        }
                     }
                 }
                 Section("Private Cloud Compute (iOS 27)") {
@@ -31,7 +34,7 @@ struct AvailabilityView: View {
             }
             .navigationTitle("Model status")
             .refreshable { status.refresh() }
-            .task { status.refresh() }
+            .task { await status.watch() }
         }
     }
 }

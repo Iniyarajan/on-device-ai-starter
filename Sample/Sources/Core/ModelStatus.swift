@@ -14,6 +14,19 @@ final class ModelStatus {
 
     private(set) var state: State = .checking
     private(set) var cloud: String = "…"
+    private(set) var retries = 0
+
+    /// `modelNotReady` is transient (fresh simulator boot, first launch after an OS update, model still
+    /// downloading). Poll every 5 s for up to 2 minutes instead of leaving the user on a dead screen.
+    func watch() async {
+        retries = 0
+        refresh()
+        while case .unavailable(let reason, _) = state, reason.contains("modelNotReady"), retries < 24 {
+            try? await Task.sleep(for: .seconds(5))
+            retries += 1
+            refresh()
+        }
+    }
 
     func refresh() {
         let model = SystemLanguageModel.default
