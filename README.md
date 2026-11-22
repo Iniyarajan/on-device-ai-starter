@@ -46,3 +46,7 @@ project.yml               xcodegen spec; deployment target iOS 26, iOS 27 APIs b
 - Private Cloud Compute reports available but any call fails with `ModelManagerError 1046` until the app has the
   `com.apple.developer.private-cloud-compute` entitlement.
 - The final streamed snapshot is the complete struct: `Triage(snapshot.rawContent)`.
+
+## License
+
+MIT © Iniyarajan — [iniyarajan.dev](https://iniyarajan.dev)

@@ -11,9 +11,11 @@ struct NoticeView: View {
     @State private var elapsedMs: Int?
     @State private var error: String?
     @State private var running = false
+    @State private var planner = CalendarPlanner()
 
     var body: some View {
         NavigationStack {
+            ScrollViewReader { proxy in
             List {
                 Section("Notice") {
                     if let photo {
@@ -45,13 +47,42 @@ struct NoticeView: View {
                         }
                     }
                 }
+                if #available(iOS 27.0, *) {
+                    Section("Tool calling (article 3)") {
+                        Button(planner.running ? "Model is working…" : "Let the model add the kept items to Calendar") {
+                            Task { await planner.plan(items: kept) }
+                        }
+                        .disabled(planner.running || kept.isEmpty)
+                        if kept.isEmpty { Text("Extract items first; the tool session works from the validated list.").font(.footnote).foregroundStyle(.secondary) }
+                        if !planner.steps.isEmpty {
+                            LabeledContent("Events added", value: "\(planner.eventsAdded.count) · \(planner.elapsedMs) ms")
+                        }
+                        ForEach(planner.steps) { step in
+                            HStack(alignment: .top, spacing: 8) {
+                                Image(systemName: step.kind == .call ? "arrow.right.circle" : step.kind == .result ? "arrow.left.circle" : "text.bubble")
+                                    .foregroundStyle(step.kind == .call ? .blue : step.kind == .result ? .green : .secondary)
+                                Text(step.text).font(.footnote.monospaced())
+                            }
+                        }
+                        if let e = planner.error { Text(e).foregroundStyle(.red).font(.footnote) }
+                    }
+                    .id("tools")
+                }
                 if let error { Section("Error") { Text(error).foregroundStyle(.red) } }
             }
             .navigationTitle("Scan a notice")
             .onChange(of: picked) { _, item in
                 Task { if let data = try? await item?.loadTransferable(type: Data.self) { photo = UIImage(data: data); school = ""; kept = []; dropped = [] } }
             }
-            .task { if LaunchArguments.autorun { await run() } }
+            .task {
+                if LaunchArguments.autorun { await run() }
+                if CommandLine.arguments.contains("-autorun-calendar") {
+                    if kept.isEmpty { await run() }
+                    await planner.plan(items: kept)
+                    withAnimation { proxy.scrollTo("tools", anchor: .top) }
+                }
+            }
+            }
         }
     }
 

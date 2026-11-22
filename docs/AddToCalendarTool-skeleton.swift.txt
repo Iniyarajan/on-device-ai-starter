@@ -1,0 +1,51 @@
+import Foundation
+import FoundationModels
+import EventKit
+
+/// A tool = a Swift function the model may decide to call, with typed arguments it must fill in.
+struct AddToCalendarTool: Tool, @unchecked Sendable {   // EKEventStore is not Sendable; we only touch it inside call()
+    let name = "addToCalendar"
+    let description = "Adds one event to the parent's calendar. Call once per item that needs the parent's attention."
+
+    @Generable
+    struct Arguments {
+        @Guide(description: "Short event title, under 8 words")
+        var title: String
+        @Guide(description: "ISO date yyyy-MM-dd", .pattern(#/\d{4}-\d{2}-\d{2}/#))
+        var date: String
+        @Guide(description: "HH:MM 24-hour, or empty for an all-day event")
+        var time: String
+    }
+
+    let store: EKEventStore
+
+    func call(arguments: Arguments) async throws -> String {
+        let event = EKEvent(eventStore: store)
+        event.title = arguments.title
+        let fmt = DateFormatter(); fmt.dateFormat = arguments.time.isEmpty ? "yyyy-MM-dd" : "yyyy-MM-dd HH:mm"
+        guard let start = fmt.date(from: arguments.time.isEmpty ? arguments.date : "\(arguments.date) \(arguments.time)") else {
+            return "Rejected: \(arguments.date) \(arguments.time) is not a valid date"   // the model reads this and can retry
+        }
+        event.startDate = start
+        event.endDate = start.addingTimeInterval(3600)
+        event.isAllDay = arguments.time.isEmpty
+        event.calendar = store.defaultCalendarForNewEvents
+        try store.save(event, span: .thisEvent)
+        return "Added \(arguments.title) on \(arguments.date)"
+    }
+}
+
+/// Hand the tool to the session; the model decides when, and how many times, to call it.
+func planCalendar(from noticeText: String, store: EKEventStore) async throws -> String {
+    let session = LanguageModelSession(
+        tools: [AddToCalendarTool(store: store)],
+        instructions: "You help parents act on school notices. Add every item that needs the parent to do something to the calendar. Do not add holidays."
+    )
+    let response = try await session.respond(to: "Notice:\n\(noticeText)")
+    // The transcript shows what the model actually did: which tool calls, with what arguments.
+    for entry in session.transcript {
+        if case .toolCalls(let calls) = entry { for c in calls { print("tool call:", c.toolName, c.arguments) } }
+        if case .toolOutput(let out) = entry { print("tool result:", out) }
+    }
+    return response.content
+}

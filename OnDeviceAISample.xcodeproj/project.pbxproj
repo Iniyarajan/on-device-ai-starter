@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02E8747347E8889587E5404F /* AddToCalendarTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56164DE785EAF27F6998D57F /* AddToCalendarTool.swift */; };
 		28D78AC4BF44883763413610 /* sample-notice.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A4397CC24C8FB62F8FD0E4E /* sample-notice.png */; };
 		4A213DEF2940791FD924DAF1 /* AvailabilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B13C6A667F945E79A3616BFD /* AvailabilityView.swift */; };
 		5C2C5D67DBA120432205BE9D /* Triage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97CA4F7B840AAC95A11807CB /* Triage.swift */; };
@@ -33,6 +34,7 @@
 		3905D9E231D2FFC6645CB1E5 /* TriageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriageTests.swift; sourceTree = "<group>"; };
 		3A4397CC24C8FB62F8FD0E4E /* sample-notice.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sample-notice.png"; sourceTree = "<group>"; };
 		4A07C5A58EA53D8D11308FEB /* SchoolNotice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolNotice.swift; sourceTree = "<group>"; };
+		56164DE785EAF27F6998D57F /* AddToCalendarTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToCalendarTool.swift; sourceTree = "<group>"; };
 		59878528282128AFBEFF6A54 /* NoticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeView.swift; sourceTree = "<group>"; };
 		671A05792A3D3C7F3A3ABE12 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		97CA4F7B840AAC95A11807CB /* Triage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Triage.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 		4B03F97EB7B60DE9FDF61C62 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				56164DE785EAF27F6998D57F /* AddToCalendarTool.swift */,
 				2ED5829DB2001DEC8455B60A /* ModelStatus.swift */,
 				4A07C5A58EA53D8D11308FEB /* SchoolNotice.swift */,
 				97CA4F7B840AAC95A11807CB /* Triage.swift */,
@@ -218,6 +221,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02E8747347E8889587E5404F /* AddToCalendarTool.swift in Sources */,
 				D23A6712831C00689440C433 /* App.swift in Sources */,
 				4A213DEF2940791FD924DAF1 /* AvailabilityView.swift in Sources */,
 				79F809DF389DFB5FB23B9C1D /* ModelStatus.swift in Sources */,

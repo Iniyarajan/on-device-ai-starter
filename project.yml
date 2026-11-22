@@ -35,6 +35,7 @@ targets:
         UILaunchScreen: {}
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         ITSAppUsesNonExemptEncryption: false
+        NSCalendarsFullAccessUsageDescription: The sample lets the on-device model add school-notice items to your calendar.
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.iniyarajan.ondeviceai.sample
