@@ -3,6 +3,13 @@
 A small SwiftUI app that turns the claims from the Foundation Models article series into things you can
 tap. Same model as iPhone 15 Pro and later; runs in the iOS 27 simulator with Apple Intelligence on the Mac.
 
+<p align="center">
+  <img src="screenshots/1-status.png" width="200" alt="Model availability & status">
+  <img src="screenshots/2-triage.png" width="200" alt="Support ticket → structured Triage, streamed">
+  <img src="screenshots/3-notice.png" width="200" alt="Photo of a circular → structured items">
+  <img src="screenshots/4-calendar-tool.png" width="200" alt="On-device tool call: add to calendar">
+</p>
+
 | Tab | What it shows | Article |
 |---|---|---|
 | **Status** | availability, model variant, context window (a runtime value), capabilities, Private Cloud Compute state | 1 |
